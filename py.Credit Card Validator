@@ -1,0 +1,93 @@
+def get_digit(number):
+    """
+    A helper function that calculates the sum of the digits of a number.
+    It is used to apply the Luhn algorithm (which involves multiplying digits 
+    by 2 and summing the results).
+    
+    Parameters:
+        number (int): A number that can be a single or two-digit integer.
+        
+    Returns:
+        int: The sum of the digits of the number.
+    """
+    return number % 10 + (number // 10 % 10)
+
+def sum_odd_digits(card_number):
+    """
+    Sums up the digits of the card number located at odd indices from right to left 
+    (0-indexed). This is part of the Luhn algorithm.
+    
+    Parameters:
+        card_number (str): The credit card number as a string.
+        
+    Returns:
+        int: Sum of digits at odd positions in the card number.
+    """
+    sum_odd = 0
+    # Iterate over the digits from right to left with a step of 2 (odd positions).
+    for i in range(len(card_number) - 1, -1, -2):
+        sum_odd += int(card_number[i])
+    return sum_odd
+
+def sum_even_digits(card_number):
+    """
+    Sums up the digits of the card number located at even indices from right to left
+    (0-indexed). The even-positioned digits are multiplied by 2 before summing.
+    
+    Parameters:
+        card_number (str): The credit card number as a string.
+        
+    Returns:
+        int: Sum of digits at even positions, after doubling each digit.
+    """
+    sum_even = 0
+    # Iterate over the digits from right to left with a step of 2 (even positions).
+    for i in range(len(card_number) - 2, -1, -2):
+        sum_even += get_digit(int(card_number[i]) * 2)
+    return sum_even
+
+def validate_card(card_number):
+    """
+    Validates a credit card number using the Luhn algorithm.
+    
+    The Luhn algorithm is a checksum formula used to validate a variety of identification numbers, 
+    including credit card numbers. The basic idea is to reverse the digits of the number and 
+    double every second digit from the right. If doubling results in a number greater than 9, 
+    the digits of that result are summed. Finally, the sums of all digits are added together, 
+    and if the total is divisible by 10, the card number is valid.
+    
+    Parameters:
+        card_number (str): The credit card number as a string.
+        
+    Returns:
+        bool: True if the card number is valid, False otherwise.
+    """
+    # Calculate the sum of digits at odd and even positions
+    result = sum_even_digits(card_number) + sum_odd_digits(card_number)
+
+    # The card is valid if the result is divisible by 10 (Luhn check)
+    return result % 10 == 0
+
+if __name__ == "__main__":
+    print("********** Credit Card Validator **********")
+    print("This program validates credit card numbers using the Luhn algorithm.\n")
+    
+    while True:
+        # Ask the user to input a credit card number
+        card_number = input("Enter a credit card number (or type 'exit' to quit): ")
+
+        # Exit condition
+        if card_number.lower() == 'exit':
+            print("Exiting the program.")
+            break
+
+        # Ensure that the input contains only digits
+        if not card_number.isdigit():
+            print("Invalid input! Please enter only numbers.")
+            continue
+
+        # Validate the credit card number
+        if validate_card(card_number):
+            print(f"{card_number} is valid!")
+        else:
+            print(f"{card_number} is not valid!")

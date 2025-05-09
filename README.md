@@ -1,10 +1,5 @@
-
-Credit Card Validator
-
- Overview
-
-This Python program validates credit card numbers using the Luhn algorithm, a checksum formula designed to check the validity of various identification numbers, including credit cards. It performs arithmetic operations on the digits of the card number to determine if it’s valid.
-
+Credit Card Validator 
+Overview
 
  Features
 

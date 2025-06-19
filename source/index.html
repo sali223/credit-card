@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Validator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Credit Card Validator</h1>
+        <p>This tool validates credit card numbers using the Luhn algorithm.</p>
+        <input type="text" id="cardNumber" placeholder="Enter credit card number">
+        <button onclick="validateCard()">Validate</button>
+        <p id="resultMessage"></p>
+    </div>
+
+    <script>
+        function getDigit(number) {
+            return number % 10 + Math.floor(number / 10) % 10;
+        }
+
+        function sumOddDigits(cardNumber) {
+            let sum = 0;
+            for (let i = cardNumber.length - 1; i >= 0; i -= 2) {
+                sum += parseInt(cardNumber[i]);
+            }
+            return sum;
+        }
+
+        function sumEvenDigits(cardNumber) {
+            let sum = 0;
+            for (let i = cardNumber.length - 2; i >= 0; i -= 2) {
+                sum += getDigit(parseInt(cardNumber[i]) * 2);
+            }
+            return sum;
+        }
+
+        function validateCard() {
+            const cardNumber = document.getElementById("cardNumber").value;
+            const result = document.getElementById("resultMessage");
+
+            if (cardNumber.toLowerCase() === 'exit') {
+                result.textContent = "Exiting is not supported here.";
+                return;
+            }
+
+            if (!/^\d+$/.test(cardNumber)) {
+                result.textContent = "Invalid input! Please enter only numbers.";
+                result.style.color = "red";
+                return;
+            }
+
+            const total = sumOddDigits(cardNumber) + sumEvenDigits(cardNumber);
+            if (total % 10 === 0) {
+                result.textContent = `${cardNumber} is valid!`;
+                result.style.color = "green";
+            } else {
+                result.textContent = `${cardNumber} is not valid!`;
+                result.style.color = "red";
+            }
+        }
+    </script>
+</body>
+</html>
